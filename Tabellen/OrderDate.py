@@ -5,7 +5,6 @@ conn_str = (
     r'DBQ=Database/AenC.accdb;'
 )
 conn = pyodbc.connect(conn_str)
-
 cursor = conn.cursor()
 
 query = '''
@@ -14,10 +13,13 @@ FROM sales_order
 WHERE (((IsDate([order_date]))<>False));
 '''
 cursor.execute(query)
-
 results = cursor.fetchall()
 
+# Print
+print("=== OrderDateinformatie ===")
+x = 0
 for row in results:
+    x += 1
     sales_order_id = row.id
     day = row.day
     month = row.month
@@ -30,3 +32,5 @@ for row in results:
     print("Quarter:", quarter)
     print("Year:", year)
     print("--------------------")
+
+print("Aantal datums:", x)
