@@ -1,4 +1,6 @@
 import pyodbc
+import os
+import csv
 
 conn_str = (
     r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
@@ -14,24 +16,14 @@ FROM state INNER JOIN customer ON state.state_id = customer.state;
 cursor.execute(query)
 results = cursor.fetchall()
 
-# Print 
-print("=== Klanteninformatie ===")
-x = 0
-for row in results:
-    x += 1
-    customer_id = row.id
-    company_name = row.company_name
-    fname = row.fname
-    address = row.address
-    city = row.city
-    country = row.country
+# Create a directory to store the data
+if not os.path.exists('Output'):
+    os.makedirs('Output')
 
-    print("Customer ID:", customer_id)
-    print("Company Name:", company_name)
-    print("Name:", fname)
-    print("Address:", address)
-    print("City:", city)
-    print("Country:", country)
-    print("--------------------")
-
-print("Aantal klanten:", x)
+with open('Output/Customer.csv', 'w', newline='', encoding='utf-16') as csvfile:
+    fieldnames = ['ID', 'Company_name', 'fname', 'adress', 'city', 'country']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for row in results:
+        writer.writerow({'ID': row[0], 'Company_name': row[1], 'fname': row[2], 'adress': row[3], 'city': row[4], 'country': row[5]})
+        

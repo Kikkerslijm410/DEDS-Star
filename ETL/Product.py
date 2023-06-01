@@ -1,4 +1,6 @@
 import pyodbc
+import os
+import csv
 
 conn_str = (
     r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
@@ -14,20 +16,13 @@ FROM product;
 cursor.execute(query)
 results = cursor.fetchall()
 
-# Print	
-print("=== Productinformatie ===")
-x = 0
-for row in results:
-    x += 1
-    product_id = row.id
-    product_name = row.name
-    product_description = row.description
-    product_category = row.Category
+# Create a directory to store the data
+if not os.path.exists('Output'):
+    os.makedirs('Output')
 
-    print("Product ID:", product_id)
-    print("Product Name:", product_name)
-    print("Product Description:", product_description)
-    print("Product Category:", product_category)
-    print("--------------------")
-
-print("Aantal producten:", x)
+with open('Output/Product.csv', 'w', newline='', encoding='utf-16') as csvfile:
+    fieldnames = ['ID', 'Name', 'Description', 'Category']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for row in results:
+        writer.writerow({'ID': row[0], 'Name': row[1], 'Description': row[2], 'Category': row[3]})

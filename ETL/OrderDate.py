@@ -1,4 +1,6 @@
 import pyodbc
+import os
+import csv
 
 conn_str = (
     r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
@@ -15,22 +17,13 @@ WHERE (((IsDate([order_date]))<>False));
 cursor.execute(query)
 results = cursor.fetchall()
 
-# Print
-print("=== OrderDateinformatie ===")
-x = 0
-for row in results:
-    x += 1
-    sales_order_id = row.id
-    day = row.day
-    month = row.month
-    quarter = row.quarter
-    year = row.year
+# Create a directory to store the data
+if not os.path.exists('Output'):
+    os.makedirs('Output')
 
-    print("Sales Order ID:", sales_order_id)
-    print("Day:", day)
-    print("Month:", month)
-    print("Quarter:", quarter)
-    print("Year:", year)
-    print("--------------------")
-
-print("Aantal datums:", x)
+with open('Output/OrderDate.csv', 'w', newline='', encoding='utf-16') as csvfile:
+    fieldnames = ['ID', 'Day', 'Month', 'Quarter', 'Year']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for row in results:
+        writer.writerow({'ID': row[0], 'Day': row[1], 'Month': row[2], 'Quarter': row[3], 'Year': row[4]})
