@@ -7,7 +7,7 @@ supabase_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 client = supabase.create_client(supabase_url, supabase_key)
 # Orders data
-table_name = "Northwind.Orders"
+table_name = "OutdoorFusion.Order"
 table = client.table(table_name)
 response = table.select('*').execute()
 data = response.data

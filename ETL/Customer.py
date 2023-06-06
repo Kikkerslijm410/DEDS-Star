@@ -17,10 +17,10 @@ cursor.execute(query)
 results = cursor.fetchall()
 
 # Create a directory to store the data
-if not os.path.exists('Output'):
-    os.makedirs('Output')
+if not os.path.exists('ETL/Output'):
+    os.makedirs('ETL/Output')
 
-with open('Output/Customer.csv', 'w', newline='', encoding='utf-16') as csvfile:
+with open('ETL/Output/Customer.csv', 'w', newline='', encoding='utf-16') as csvfile:
     fieldnames = ['ID', 'Company_name', 'fname', 'adress', 'city', 'country']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
